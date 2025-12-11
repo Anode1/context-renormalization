@@ -1,0 +1,66 @@
+END OF DAY / UPDATE CONTEXT ACCORDING TO CONTEXT PROTOCOL below
+============================================================
+CONTEXT PROTOCOL (DO NOT EDIT OR COMPRESS)
+============================================================
+Version: 1
+Context_Session_Count: 2          # Increase by 1 for each major “day session”
+Context_Total_Budget_Lines: 500   # Target compressed size for this file
+
+Purpose:
+- This file is a long-lived, machine-readable knowledge-transfer document.
+- It encodes project-specific conventions, invariants, and design intent.
+- The actual codebase (SQL/Java/Servlets/Tests/React) remains the primary
+  source of truth; this file explains “how to read and extend it”.
+
+Compression / Fairness Principle:
+- Let N = Context_Session_Count (number of major sessions summarized).
+- After compression, this file should be ≈ Context_Total_Budget_Lines lines.
+- Each session’s knowledge should have comparable informational weight
+  (roughly 1/N of the file, up to judgment).
+- As N grows, older sessions are summarized more aggressively, but never
+  entirely erased.
+
+Update Protocol (for future ChatGPT sessions):
+1) When the user uploads this `context.txt` + code and clearly indicates
+   “END OF DAY / UPDATE CONTEXT ACCORDING TO CONTEXT PROTOCOL”:
+   - Read `context.txt` fully and inspect the current code.
+   - Increment Context_Session_Count by 1 in the CONTEXT PROTOCOL header only.
+2) Append a new “SESSION <N> — KNOWLEDGE SUMMARY” block at the *end* of the
+   KNOWLEDGE REGION summarizing what is NEW/CHANGED today:
+   - New conventions, schema changes, endpoint behavior, invariants.
+   - Do NOT restate what is obviously encoded in the current code or
+     already clearly described in previous session blocks.
+3) If total length > Context_Total_Budget_Lines:
+   - Compress older session sections:
+     • Merge duplicates.
+     • Remove verbose narrative.
+     • Replace long examples with rules or references to code/REST docs.
+   - Prefer compressing content that is now clearly represented in the
+     codebase (schema, servlet endpoints, tests).
+   - Every session must retain at least a concise summary of:
+     • What was done that session.
+     • What rules/invariants it introduced or changed.
+4) DO NOT:
+   - Modify or delete this CONTEXT PROTOCOL block.
+   - Compress lines outside the KNOWLEDGE REGION markers.
+
+Knowledge Region Markers:
+- Only lines between the following markers may be edited/compressed:
+  - “=== BEGIN KNOWLEDGE REGION ===”
+  - “=== END KNOWLEDGE REGION ===”
+    @author Vasili Gavrilov 09/12/2025
+
+============================================================
+=== BEGIN KNOWLEDGE REGION =================================
+============================================================
+
+============================================================
+SESSION 1 
+(Original “Become the Same Assistant” Context)
+============================================================
+
+
+============================================================
+=== END KNOWLEDGE REGION ===================================
+============================================================
+
