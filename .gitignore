@@ -1,0 +1,17 @@
+
+work/
+
+
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Backup files ---
+*.tmp
+*.bak
+*.swp
+*.swp
+*~
+
+
