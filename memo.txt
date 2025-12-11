@@ -1,0 +1,2 @@
+pdflatex yourfile.tex
+convert -density 300 yourfile.pdf -quality 100 output.png
