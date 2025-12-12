@@ -1,51 +1,47 @@
 END OF DAY / UPDATE CONTEXT ACCORDING TO CONTEXT PROTOCOL below
 ============================================================
-CONTEXT PROTOCOL (DO NOT EDIT OR COMPRESS)
+CONTEXT PROTOCOL (V2.3 — IMMUTABLE)
 ============================================================
-Version: 1
-Context_Session_Count: 2          # Increase by 1 for each major “day session”
-Context_Total_Budget_Lines: 500   # Target compressed size for this file
 
-Purpose:
-- This file is a long-lived, machine-readable knowledge-transfer document.
-- It encodes project-specific conventions, invariants, and design intent.
-- The actual codebase (SQL/Java/Servlets/Tests/React) remains the primary
-  source of truth; this file explains “how to read and extend it”.
+Version: 2.3
+Context_Session_Count: 4
+Context_Total_Budget_Lines: 500
 
-Compression / Fairness Principle:
-- Let N = Context_Session_Count (number of major sessions summarized).
-- After compression, this file should be ≈ Context_Total_Budget_Lines lines.
-- Each session’s knowledge should have comparable informational weight
-  (roughly 1/N of the file, up to judgment).
-- As N grows, older sessions are summarized more aggressively, but never
-  entirely erased.
+Purpose / Interpretation:
+- This file is a normative rulebook for cross-session continuity.
+- It is NOT a tutorial, explanation, or design essay.
+- Rules must be concise; do not expand unless explicitly asked.
 
-Update Protocol (for future ChatGPT sessions):
-1) When the user uploads this `context.txt` + code and clearly indicates
-   “END OF DAY / UPDATE CONTEXT ACCORDING TO CONTEXT PROTOCOL”:
-   - Read `context.txt` fully and inspect the current code.
-   - Increment Context_Session_Count by 1 in the CONTEXT PROTOCOL header only.
-2) Append a new “SESSION <N> — KNOWLEDGE SUMMARY” block at the *end* of the
-   KNOWLEDGE REGION summarizing what is NEW/CHANGED today:
-   - New conventions, schema changes, endpoint behavior, invariants.
-   - Do NOT restate what is obviously encoded in the current code or
-     already clearly described in previous session blocks.
-3) If total length > Context_Total_Budget_Lines:
-   - Compress older session sections:
-     • Merge duplicates.
-     • Remove verbose narrative.
-     • Replace long examples with rules or references to code/REST docs.
-   - Prefer compressing content that is now clearly represented in the
-     codebase (schema, servlet endpoints, tests).
-   - Every session must retain at least a concise summary of:
-     • What was done that session.
-     • What rules/invariants it introduced or changed.
-4) DO NOT:
-   - Modify or delete this CONTEXT PROTOCOL block.
-   - Compress lines outside the KNOWLEDGE REGION markers.
+Global Invariants:
+- If a rule, helper, convention, or style exists and is correct, it is canonical.
+- Do NOT rewrite, restyle, reformat, or replace canonical material unless explicitly requested.
+- Do NOT introduce alternative styles when a canonical one exists.
 
-Knowledge Region Markers:
-- Only lines between the following markers may be edited/compressed:
+Optimization Priority:
+- Correctness of invariants > cross-session stability > brevity/density.
+
+Update Protocol (MANDATORY):
+1) Trigger: user explicitly signals
+   “END OF DAY / UPDATE CONTEXT ACCORDING TO CONTEXT PROTOCOL”.
+2) Read this file fully BEFORE generating output.
+3) Increment Context_Session_Count in THIS HEADER ONLY.
+4) Append a new block at the END of the KNOWLEDGE REGION named:
+   “SESSION <N> — KNOWLEDGE SUMMARY”.
+5) Session content MUST include ONLY what is new or changed today.
+   Do NOT restate existing rules, code-obvious facts, or prior sessions.
+6) If total lines exceed Context_Total_Budget_Lines:
+   - Compress older sessions starting from SESSION 1.
+   - Remove narrative and redundancy first.
+   - Preserve all invariants and decisions.
+   - Never delete a session entirely.
+
+Output / Delivery Rule:
+- When returning this file, return the ENTIRE FILE
+  as plain text inside a single fenced block:
+  ```txt <entire file> ```
+
+Knowledge Region Markers (Only lines between the following markers may be edited/compressed):
+
   - “=== BEGIN KNOWLEDGE REGION ===”
   - “=== END KNOWLEDGE REGION ===”
     @author Vasili Gavrilov 09/12/2025
@@ -373,11 +369,9 @@ Type 4 — Many Assets, One Question per Asset
   - Persist into ANSWER, then ANSWER_ASSET accordingly.
 - Error and status handling:
   - Follow global conventions from Session 1 (status codes and error JSON).
-  
 ============================================================
 SESSION 3 — SERVLET ROUTING STYLE + DAILY EXTENSION RULES
 ============================================================
-
 [1. Mandatory RestServlet Routing Style]
 - All REST routing in `RestServlet` must follow the explicit “n-block style”.
   This is an architectural invariant and overrides any default ChatGPT style.
@@ -403,7 +397,6 @@ SESSION 3 — SERVLET ROUTING STYLE + DAILY EXTENSION RULES
            ... 
        }
   4. Each path.depth (n) forms its own nested block, with its own return.
-
 - Purpose:
   - Matches the existing RestServlet architecture precisely.
   - Ensures no ambiguity in future endpoint additions.
@@ -438,6 +431,66 @@ This workflow is required for annotation-layer endpoints such as:
 - POST /tasks/{task_id}/answers
 - GET  /tasks/{task_id}/answers
 - POST /tasks/{task_id}/finish
+============================================================
+SESSION 4 — CANONICAL BACKEND TESTING STYLE (LOCKED)
+============================================================
+Purpose:
+- Define a single, mandatory backend test style.
+- Prevent test-style drift, over-abstraction, and helper proliferation.
+- This session is normative; deviation requires explicit approval.
+Canonical Template:
+- `SampleTest.java` is the authoritative test template.
+- All backend tests MUST be written by copying and adapting SampleTest.
+- SampleTest is a style contract, not a permanent regression test.
+Framework Rules:
+- JUnit 3 ONLY:
+  - `extends TestCase`
+  - `public void testXxx() throws Exception`
+- Forbidden:
+  - `@Test`, JUnit 4/5, parameterized tests, runners, DSLs, new frameworks.
+Helper Invariant (Critical):
+- IF A HELPER ALREADY EXISTS AND IS CORRECT, IT IS CANONICAL.
+- Do NOT rewrite helpers for clarity, style, symmetry, or refactoring.
+- Do NOT introduce alternate implementations of existing helpers.
+- Example: `TestUtil.read(HttpURLConnection)` must be used as-is.
+Allowed Helpers (Strictly Limited):
+- `read(HttpURLConnection)` — existing implementation, unchanged.
+- `loginAndGetToken(email, password)` — optional, for auth boilerplate only.
+- Simple JSON accessors (e.g. `getInt(...)`) — optional.
+- Optional minimal DB cleanup helper (e.g. `execUpdate(...)`).
+- Explicitly forbidden:
+  - response wrapper objects
+  - HTTP abstraction layers (`callJson`, etc.)
+  - test mini-frameworks
+  - hiding HTTP mechanics behind helpers
+HTTP Usage in Tests:
+- Tests MUST use `HttpURLConnection` inline.
+- Each test explicitly:
+  - builds URL
+  - sets method and headers
+  - writes JSON
+  - reads status code
+  - reads body via `TestUtil.read(...)`
+Mandatory Test Structure:
+1) Header comment: Endpoint / Case / Expect / Cleanup
+2) Arrange
+3) Act
+4) Assert
+5) Cleanup in `finally`
+Idempotency:
+- Any test that inserts/modifies data MUST clean it up.
+- Cleanup must be explicit, local to the test, and in `finally`.
+- Tests must be safe to re-run in any order.
+Testing Philosophy:
+- Tests are specifications, not abstractions.
+- Clarity > elegance.
+- Duplication is acceptable; hidden behavior is not.
+- Optimize for long-term entropy control.
+Enforcement:
+- Always copy SampleTest.
+- Never invent new styles.
+- Never refactor helpers unless explicitly requested.
+- When unsure, prefer more explicit code, not abstraction.
 ============================================================
 === END KNOWLEDGE REGION ===================================
 ============================================================

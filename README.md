@@ -67,6 +67,7 @@ The paper proposes creating a formal metalanguage for:
 - Safety constraints
 - Verification of compression steps
 - Cross-vendor interoperability
+- Ideally to be defined in BNF
 
 This would make Context Renormalization a standardized continuity protocol for LLM systems.
 
