@@ -1,6 +1,15 @@
 # Context Renormalization
 A Bounded-Memory Protocol for Multi-Session LLM Work
 
+> **Status: superseded by [AIS](https://github.com/Anode1/ais) (reference-based context).**
+> Context Renormalization held the working knowledge in-band, in a single bounded
+> `context.txt` ledger rewritten to a fixed budget each session. AIS supersedes that
+> model: it keeps durable knowledge in an associative index and supplies context as
+> references (pointers recalled on demand), so the in-band ledger and the renormalization
+> step become unnecessary. AIS is both the durable store this protocol migrated to when
+> the ledger overflowed, and the retrieve-by-reference mechanism that replaces it. This
+> repository remains for reference.
+
 Context Renormalization is a simple, model-agnostic protocol for maintaining continuity across multiple LLM sessions. Instead of relying on long, slow conversations or re-explaining project history, the method uses a small text file (context.txt) as a bounded knowledge ledger. Each LLM session adds new durable knowledge and rewrites the ledger back down to a fixed size budget.
 
 This repository contains:
